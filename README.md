@@ -2,7 +2,7 @@
 My first repository
 # Sword Art Online 🎮
 
-![Sword Art Online Poster](https://wall.alphacoders.com/big.php?i=811589)
+![Sword Art Online Poster](thumb-1920-811589.jpg)
 
 > *"In this world, a game over means death in real life."*
 

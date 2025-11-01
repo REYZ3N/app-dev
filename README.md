@@ -15,9 +15,12 @@ The story is set in the near future where players get trapped inside a **virtual
 ## 🧍 Main Characters
 1. **Kirito** *(Kazuto Kirigaya)* – The main protagonist and a skilled solo player.
 ![kirito](png-transparent-kirito-asuna-sinon-sword-art-online-2-aincrad-asuna-black-hair-cartoon-fictional-character-removebg-preview.png)  
-3. **Asuna** *(Asuna Yuuki)* – Kirito’s partner and one of the strongest players in SAO.  
-4. **Sinon** – A sharpshooter in Gun Gale Online.  
-5. **Leafa** – Kirito’s cousin and ally in ALfheim Online.
+2. **Asuna** *(Asuna Yuuki)* – Kirito’s partner and one of the strongest players in SAO.
+![asuna](imgbin-asuna-kirito-sword-art-online-character-anime-asuna-asuna-L7uBaHHu35e8Nt7QUdbUhYB0F-removebg-preview.png)
+3. **Sinon** – A sharpshooter in Gun Gale Online.
+![sinon]()
+4. **Leafa** – Kirito’s cousin and ally in ALfheim Online.
+![leafa]()
 
 ---
 

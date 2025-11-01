@@ -69,7 +69,7 @@ The story is set in the near future where players get trapped inside a **virtual
 
 4. **Leafa** – Kirito’s cousin and ally in ALfheim Online.
    
-![leafa]()
+![leafa](sticker-png-leafa-asuna-kirito-sinon-sword-art-online-sword-art-online-computer-wallpaper-cartoon-fictional-character-desktop-wallpaper-abridgement-removebg-preview.png)
 
 ---
 

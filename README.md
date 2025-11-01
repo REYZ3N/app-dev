@@ -1,6 +1,6 @@
 # app-dev
 My first repository
-# Sword Art Online 🎮
+# Sword Art Online ⚔️
 
 ![Sword Art Online Poster](thumb-1920-811589.jpg)
 
@@ -12,7 +12,7 @@ The story is set in the near future where players get trapped inside a **virtual
 
 ---
 
-## ⚔️ Main Characters
+## 🧍 Main Characters
 1. **Kirito** *(Kazuto Kirigaya)* – The main protagonist and a skilled solo player.  
 2. **Asuna** *(Asuna Yuuki)* – Kirito’s partner and one of the strongest players in SAO.  
 3. **Sinon** – A sharpshooter in Gun Gale Online.  
@@ -20,7 +20,7 @@ The story is set in the near future where players get trapped inside a **virtual
 
 ---
 
-## 🌍 Series Overview
+## Series Overview
 | Season | Game World | Year Released |
 |:-------|:------------|:--------------|
 | Season 1 | Sword Art Online | 2012 |

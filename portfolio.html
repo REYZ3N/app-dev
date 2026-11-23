@@ -1,0 +1,1136 @@
+
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth" style="scroll-padding-top: 136px;">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#06080d" />
+  <title>Reymar John O. Sengco — Interactive Bento Portfolio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    :root {
+      --glow-rgb: 56, 189, 248;       /* Sky / Cyan */
+      --glow-sec-rgb: 129, 140, 248;  /* Indigo */
+      --accent-hex: #38bdf8;
+      --accent-sec: #818cf8;
+      --bg-base: #06080d;
+      --card-bg: rgba(14, 18, 28, 0.82);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-base);
+      color: #f1f5f9;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      background-image:
+        radial-gradient(circle at 15% 0%, rgba(var(--glow-rgb), 0.08), transparent 40%),
+        radial-gradient(circle at 85% 15%, rgba(var(--glow-sec-rgb), 0.08), transparent 40%),
+        linear-gradient(to right, rgba(255, 255, 255, 0.022) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.022) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 44px 44px, 44px 44px;
+    }
+
+    /* Inline Photo Expansion (Not a Modal) */
+    .profile-photo-frame {
+      width: 88px;
+      height: 88px;
+      border-radius: 1.15rem;
+      overflow: hidden;
+      border: 1.5px solid rgba(var(--glow-rgb), 0.45);
+      box-shadow: 0 0 24px -6px rgba(var(--glow-rgb), 0.35);
+      cursor: pointer;
+      transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                  height 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                  border-radius 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                  border-color 0.25s ease,
+                  box-shadow 0.25s ease;
+    }
+
+    .profile-photo-frame:hover,
+    .profile-photo-frame:focus-visible {
+      border-color: rgba(var(--glow-rgb), 0.9);
+      box-shadow: 0 0 32px -4px rgba(var(--glow-rgb), 0.5);
+      outline: none;
+    }
+
+    .profile-photo-frame.is-expanded {
+      width: 100%;
+      max-width: 440px;
+      height: 310px;
+      border-radius: 1.35rem;
+    }
+
+    @media (min-width: 640px) {
+      .profile-photo-frame {
+        width: 100px;
+        height: 100px;
+      }
+      .profile-photo-frame.is-expanded {
+        height: 350px;
+      }
+    }
+
+    /* Bento Card & Cross-Platform Pointer / Touch / Scroll Glow */
+    .bento-card {
+      position: relative;
+      background: var(--card-bg);
+      border-radius: 1.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      overflow: hidden;
+      touch-action: manipulation;
+      transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.28s ease, box-shadow 0.28s ease;
+    }
+
+    /* Inner ambient radial light */
+    .bento-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: radial-gradient(
+        520px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+        rgba(var(--glow-rgb), 0.14),
+        rgba(var(--glow-sec-rgb), 0.06) 45%,
+        transparent 75%
+      );
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Glowing border ring */
+    .bento-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 1.5px;
+      background: radial-gradient(
+        340px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+        rgba(var(--glow-rgb), 0.92),
+        rgba(var(--glow-sec-rgb), 0.38) 45%,
+        transparent 75%
+      );
+      -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+      mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .bento-card:hover,
+    .bento-card:focus-visible,
+    .bento-card.is-glowing {
+      transform: translateY(-2px);
+      box-shadow:
+        0 18px 40px -15px rgba(0, 0, 0, 0.7),
+        0 0 28px -8px rgba(var(--glow-rgb), 0.28);
+      outline: none;
+    }
+
+    .bento-card:active {
+      transform: scale(0.992);
+    }
+
+    .bento-card:hover::before,
+    .bento-card:focus-visible::before,
+    .bento-card.is-glowing::before,
+    .bento-card:hover::after,
+    .bento-card:focus-visible::after,
+    .bento-card.is-glowing::after {
+      opacity: 1;
+    }
+
+    .bento-content {
+      position: relative;
+      z-index: 3;
+      height: 100%;
+    }
+
+    /* Glowing interactive pills */
+    .glow-pill {
+      position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      background: rgba(255, 255, 255, 0.03);
+      touch-action: manipulation;
+      transition: all 0.2s ease;
+    }
+
+    .glow-pill:hover,
+    .glow-pill:focus-visible {
+      border-color: rgba(var(--glow-rgb), 0.65);
+      background: rgba(var(--glow-rgb), 0.12);
+      box-shadow: 0 0 18px rgba(var(--glow-rgb), 0.25);
+      transform: translateY(-1px);
+      outline: none;
+    }
+
+    .glow-pill:active {
+      transform: scale(0.97);
+    }
+
+    .glow-pill.active {
+      border-color: rgba(var(--glow-rgb), 0.85);
+      background: rgba(var(--glow-rgb), 0.18);
+      color: #ffffff;
+      box-shadow: 0 0 20px rgba(var(--glow-rgb), 0.3);
+    }
+
+    .accent-text {
+      color: var(--accent-hex);
+    }
+
+    .accent-gradient-text {
+      background: linear-gradient(120deg, #ffffff 10%, var(--accent-hex) 55%, var(--accent-sec) 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .accent-btn {
+      background: linear-gradient(135deg, var(--accent-hex), var(--accent-sec));
+      color: #04070d;
+      font-weight: 600;
+      box-shadow: 0 0 22px rgba(var(--glow-rgb), 0.3);
+      touch-action: manipulation;
+      transition: all 0.22s ease;
+    }
+
+    .accent-btn:hover,
+    .accent-btn:focus-visible {
+      filter: brightness(1.08);
+      box-shadow: 0 0 30px rgba(var(--glow-rgb), 0.5);
+      transform: translateY(-1px);
+      outline: none;
+    }
+
+    .accent-btn:active {
+      transform: scale(0.97);
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    ::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #06080d;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent-hex);
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-sky-400/30 selection:text-white">
+
+  <!-- Top Navigation -->
+  <header class="sticky top-0 z-40 border-b border-white/[0.06] bg-[#06080d]/85 backdrop-blur-xl">
+    <div class="mx-auto flex max-w-6xl items-center justify-between px-5 py-4 sm:px-8">
+      <a href="#top" class="flex items-center gap-3 group">
+        <span class="flex h-9 w-9 items-center justify-center rounded-lg border border-white/15 bg-white/5 font-mono text-xs font-bold accent-text transition group-hover:border-sky-400/60">
+          RJS
+        </span>
+        <span class="font-mono text-sm font-semibold tracking-tight text-slate-200">
+          REYMAR<span class="accent-text">.BENTO</span>
+        </span>
+      </a>
+
+      <!-- Desktop Links with Generous Spacing -->
+      <nav class="hidden items-center gap-9 text-xs font-medium text-slate-400 md:flex">
+        <a href="#overview" class="py-1.5 transition hover:text-white">Overview</a>
+        <a href="#experience" class="py-1.5 transition hover:text-white">Experience</a>
+        <a href="#skills" class="py-1.5 transition hover:text-white">Skills &amp; Code</a>
+        <a href="#credentials" class="py-1.5 transition hover:text-white">Trainings &amp; Contact</a>
+      </nav>
+
+      <!-- Glow Palette Selector -->
+      <div class="flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5" title="Switch Glow Color">
+        <span class="hidden font-mono text-[10px] uppercase tracking-wider text-slate-500 sm:inline mr-1">Glow</span>
+        <button onclick="setGlowTheme('cyan', this)" class="theme-dot h-4 w-4 sm:h-3.5 sm:w-3.5 rounded-full bg-gradient-to-tr from-sky-400 to-indigo-400 ring-2 ring-white/80 transition" aria-label="Cyan Glow"></button>
+        <button onclick="setGlowTheme('emerald', this)" class="theme-dot h-4 w-4 sm:h-3.5 sm:w-3.5 rounded-full bg-gradient-to-tr from-emerald-400 to-teal-300 opacity-60 hover:opacity-100 transition" aria-label="Emerald Glow"></button>
+        <button onclick="setGlowTheme('violet', this)" class="theme-dot h-4 w-4 sm:h-3.5 sm:w-3.5 rounded-full bg-gradient-to-tr from-violet-400 to-fuchsia-400 opacity-60 hover:opacity-100 transition" aria-label="Violet Glow"></button>
+        <button onclick="setGlowTheme('amber', this)" class="theme-dot h-4 w-4 sm:h-3.5 sm:w-3.5 rounded-full bg-gradient-to-tr from-amber-400 to-orange-400 opacity-60 hover:opacity-100 transition" aria-label="Amber Glow"></button>
+      </div>
+    </div>
+
+    <!-- Mobile Quick-Jump Strip -->
+    <nav class="no-scrollbar flex items-center gap-3 overflow-x-auto border-t border-white/[0.04] px-5 py-3 text-xs font-medium text-slate-400 md:hidden">
+      <a href="#overview" class="shrink-0 rounded-full border border-white/10 bg-white/[0.03] px-4 py-1.5 active:text-white">Overview</a>
+      <a href="#experience" class="shrink-0 rounded-full border border-white/10 bg-white/[0.03] px-4 py-1.5 active:text-white">Experience</a>
+      <a href="#skills" class="shrink-0 rounded-full border border-white/10 bg-white/[0.03] px-4 py-1.5 active:text-white">Skills &amp; Code</a>
+      <a href="#credentials" class="shrink-0 rounded-full border border-white/10 bg-white/[0.03] px-4 py-1.5 active:text-white">Trainings &amp; Contact</a>
+    </nav>
+  </header>
+
+  <!-- Main Bento Container -->
+  <main id="top" class="mx-auto max-w-6xl px-5 py-12 sm:px-8 sm:py-20">
+
+    <!-- ROW 1: HERO & PROFILE BENTO -->
+    <section id="overview" class="scroll-mt-36 md:scroll-mt-32 grid grid-cols-1 gap-10 md:grid-cols-12">
+
+      <!-- Main Hero Intro Tile (8 cols) -->
+      <article class="bento-card md:col-span-8 p-8 sm:p-12">
+        <div class="bento-content flex flex-col justify-between gap-10">
+          <div>
+            <div class="mb-8 inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 font-mono text-xs text-slate-300">
+              <span class="relative flex h-2 w-2">
+                <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
+                <span class="relative inline-flex h-2 w-2 rounded-full bg-emerald-400"></span>
+              </span>
+              Open to IT Internships &amp; Entry-Level Opportunities
+            </div>
+
+            <!-- Header + Inline Expandable Photo -->
+            <div class="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
+              <div>
+                <h1 class="text-3xl font-extrabold tracking-tight sm:text-5xl">
+                  <span class="accent-gradient-text">Reymar John O. Sengco</span>
+                </h1>
+                <p class="mt-4 font-mono text-sm text-slate-400 sm:text-base">
+                  Information Technology Student · Web &amp; Database Developer
+                </p>
+              </div>
+
+              <!-- Clickable Photo Controls & Inline Expandable Frame -->
+              <div class="flex flex-col items-start sm:items-end gap-3 shrink-0">
+                <div
+                  id="hero-photo-frame"
+                  role="button"
+                  tabindex="0"
+                  aria-expanded="false"
+                  aria-label="Click to expand or shrink profile photo inline"
+                  onclick="toggleInlinePhoto()"
+                  onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleInlinePhoto();}"
+                  class="profile-photo-frame relative bg-slate-900/90"
+                  title="Click to make photo bigger inline"
+                >
+                  <img
+                    id="hero-photo-img"
+                    src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420' viewBox='0 0 420 420'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%230f172a'/%3E%3Cstop offset='100%25' stop-color='%231e293b'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='420' height='420' fill='url(%23g)'/%3E%3Ccircle cx='210' cy='165' r='68' fill='%2338bdf8' fill-opacity='0.22' stroke='%2338bdf8' stroke-width='3'/%3E%3Cpath d='M95 350c12-62 56-98 115-98s103 36 115 98' fill='%23818cf8' fill-opacity='0.18' stroke='%23818cf8' stroke-width='3'/%3E%3Ctext x='210' y='392' text-anchor='middle' fill='%2394a3b8' font-family='monospace' font-size='18'%3EREYMAR JOHN O. SENGCO%3C/text%3E%3C/svg%3E"
+                    alt="Reymar John O. Sengco"
+                    class="h-full w-full object-cover transition-transform duration-300"
+                  />
+                </div>
+
+                <div class="flex items-center gap-2.5">
+                  <button
+                    type="button"
+                    onclick="toggleInlinePhoto()"
+                    id="photo-size-btn"
+                    class="rounded-lg border border-white/10 bg-white/[0.04] px-3 py-1.5 font-mono text-[11px] text-slate-300 transition hover:border-white/25 hover:text-white"
+                  >
+                    Enlarge Photo
+                  </button>
+                  <label class="cursor-pointer rounded-lg border border-white/10 bg-white/[0.04] px-3 py-1.5 font-mono text-[11px] accent-text transition hover:border-white/25">
+                    Change Photo
+                    <input type="file" accept="image/*" onchange="handlePhotoUpload(event)" class="hidden" />
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Inline Expanded Photo Banner -->
+            <div id="inline-photo-caption" class="mt-6 hidden items-center justify-between rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-xs text-slate-300">
+              <span>Viewing inline enlarged photo — click the photo or button again to return to compact size.</span>
+              <button type="button" onclick="toggleInlinePhoto()" class="font-mono text-[11px] accent-text hover:underline">
+                Minimize
+              </button>
+            </div>
+
+            <!-- Extra-Spacious Summary of Qualifications -->
+            <div class="mt-12 border-t border-white/[0.08] pt-10">
+              <p class="mb-7 font-mono text-xs uppercase tracking-widest text-slate-400">
+                Summary of Qualifications
+              </p>
+              <ul class="space-y-6 text-sm leading-loose text-slate-300 sm:text-[15px]">
+                <li class="flex items-start gap-4">
+                  <span class="mt-2.5 h-2 w-2 shrink-0 rounded-full bg-sky-400"></span>
+                  <span>Information Technology student at <strong class="text-white">STI College San Jose</strong> with knowledge of programming, web development, and database management.</span>
+                </li>
+                <li class="flex items-start gap-4">
+                  <span class="mt-2.5 h-2 w-2 shrink-0 rounded-full bg-sky-400"></span>
+                  <span>Familiar with <span class="accent-text font-medium">PHP, HTML/CSS, MySQL, Python, and Java fundamentals</span>.</span>
+                </li>
+                <li class="flex items-start gap-4">
+                  <span class="mt-2.5 h-2 w-2 shrink-0 rounded-full bg-sky-400"></span>
+                  <span>Willing to learn new technologies and develop technical skills through academic projects and practical experience.</span>
+                </li>
+                <li class="flex items-start gap-4">
+                  <span class="mt-2.5 h-2 w-2 shrink-0 rounded-full bg-sky-400"></span>
+                  <span>Possesses strong problem-solving, teamwork, and communication skills.</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-4 pt-4">
+            <a href="#experience" class="accent-btn rounded-xl px-7 py-3.5 text-xs sm:text-sm">
+              Explore Experience &amp; Work
+            </a>
+            <button onclick="copyToClipboard('reymarjohn00@gmail.com', 'Email address copied!')" class="glow-pill inline-flex items-center gap-2.5 rounded-xl px-6 py-3.5 font-mono text-xs text-slate-200">
+              <svg class="h-4 w-4 accent-text" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+              reymarjohn00@gmail.com
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Right Column Stack: Education & Location/Time (4 cols) -->
+      <div class="grid grid-cols-1 gap-10 md:col-span-4">
+        <article class="bento-card p-8 sm:p-9">
+          <div class="bento-content flex flex-col justify-between gap-6">
+            <div class="flex items-center justify-between">
+              <span class="font-mono text-[11px] uppercase tracking-widest text-slate-400">Education</span>
+              <span class="rounded-md border border-white/10 bg-white/5 px-2.5 py-1 font-mono text-[11px] accent-text">2023 – Present</span>
+            </div>
+            <div>
+              <h2 class="text-xl font-bold text-white">STI College San Jose</h2>
+              <p class="mt-2 text-xs text-slate-400">Information Technology Program</p>
+            </div>
+            <p class="text-xs leading-loose text-slate-300">
+              Focusing on programming logic, web development, database operations, and system troubleshooting.
+            </p>
+          </div>
+        </article>
+
+        <article class="bento-card p-8 sm:p-9">
+          <div class="bento-content flex flex-col justify-between gap-6">
+            <div class="flex items-center justify-between">
+              <span class="font-mono text-[11px] uppercase tracking-widest text-slate-400">Base Location</span>
+              <span id="live-clock" class="font-mono text-xs accent-text">UTC+8</span>
+            </div>
+            <div>
+              <p class="text-base font-semibold text-white">San Jose City, Nueva Ecija</p>
+              <p class="mt-2 text-xs text-slate-400">Tumana Zone 1B, Brgy. Palestina</p>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ROW 2: EXPERIENCE & ACADEMIC PROJECTS BENTO -->
+    <section id="experience" class="scroll-mt-36 md:scroll-mt-32 mt-16 sm:mt-20 grid grid-cols-1 gap-10 md:grid-cols-12">
+
+      <article
+        role="button"
+        tabindex="0"
+        onclick="openDetailModal('spes')"
+        onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDetailModal('spes');}"
+        class="bento-card cursor-pointer md:col-span-7 p-8 sm:p-11 group"
+      >
+        <div class="bento-content flex flex-col justify-between gap-8">
+          <div>
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <span class="rounded-full border border-white/10 bg-white/[0.05] px-3.5 py-1.5 font-mono text-[11px] accent-text">
+                WORK EXPERIENCE · JULY 2025
+              </span>
+              <span class="font-mono text-xs text-slate-400 transition group-hover:text-white">
+                Tap / Click to inspect ↗
+              </span>
+            </div>
+
+            <h3 class="mt-6 text-xl font-bold text-white sm:text-2xl">
+              SPES (Nutrition Office)
+            </h3>
+            <p class="mt-2 text-xs font-medium text-slate-400 sm:text-sm">
+              Public Employment Service Office (PESO) — San Jose City, Nueva Ecija
+            </p>
+
+            <ul class="mt-7 space-y-5 text-xs leading-loose text-slate-300 sm:text-sm">
+              <li class="flex items-start gap-3.5">
+                <span class="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-sky-400"></span>
+                <span>Checked and corrected paper records, updating quantities and volumes of supplies to keep reports exact.</span>
+              </li>
+              <li class="flex items-start gap-3.5">
+                <span class="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-sky-400"></span>
+                <span>Packed, carried, and distributed relief goods and supplies for community programs.</span>
+              </li>
+              <li class="flex items-start gap-3.5">
+                <span class="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-sky-400"></span>
+                <span>Accompanied nutrition office staff on barangay visits supporting pregnant women, first-time mothers, and teenage mothers.</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="flex flex-wrap gap-2.5 pt-2">
+            <span class="rounded-md border border-white/10 bg-white/[0.03] px-3 py-1.5 font-mono text-[11px] text-slate-300">Data Accuracy</span>
+            <span class="rounded-md border border-white/10 bg-white/[0.03] px-3 py-1.5 font-mono text-[11px] text-slate-300">Inventory Auditing</span>
+            <span class="rounded-md border border-white/10 bg-white/[0.03] px-3 py-1.5 font-mono text-[11px] text-slate-300">Community Outreach</span>
+          </div>
+        </div>
+      </article>
+
+      <article
+        role="button"
+        tabindex="0"
+        onclick="openDetailModal('academic')"
+        onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDetailModal('academic');}"
+        class="bento-card cursor-pointer md:col-span-5 p-8 sm:p-11 group"
+      >
+        <div class="bento-content flex flex-col justify-between gap-8">
+          <div>
+            <div class="flex items-center justify-between gap-3">
+              <span class="rounded-full border border-white/10 bg-white/[0.05] px-3.5 py-1.5 font-mono text-[11px] accent-text">
+                ACADEMIC · 2023–PRESENT
+              </span>
+              <span class="font-mono text-xs text-slate-400 transition group-hover:text-white">
+                Inspect ↗
+              </span>
+            </div>
+
+            <h3 class="mt-6 text-xl font-bold text-white">
+              Academic Programming Activities
+            </h3>
+            <p class="mt-2 text-xs font-medium text-slate-400">
+              STI College San Jose
+            </p>
+
+            <ul class="mt-7 space-y-5 text-xs leading-loose text-slate-300 sm:text-sm">
+              <li class="flex items-start gap-3.5">
+                <span class="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-indigo-400"></span>
+                <span>Practiced programming concepts using PHP, Python, and Java fundamentals.</span>
+              </li>
+              <li class="flex items-start gap-3.5">
+                <span class="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-indigo-400"></span>
+                <span>Applied HTML and CSS in building clean, structured web interfaces.</span>
+              </li>
+              <li class="flex items-start gap-3.5">
+                <span class="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-indigo-400"></span>
+                <span>Used MySQL to design tables, manage records, and practice database handling.</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="flex flex-wrap gap-2.5 pt-2">
+            <span class="rounded-md border border-white/10 bg-white/[0.03] px-3 py-1.5 font-mono text-[11px] text-slate-300">PHP</span>
+            <span class="rounded-md border border-white/10 bg-white/[0.03] px-3 py-1.5 font-mono text-[11px] text-slate-300">Python</span>
+            <span class="rounded-md border border-white/10 bg-white/[0.03] px-3 py-1.5 font-mono text-[11px] text-slate-300">Java</span>
+            <span class="rounded-md border border-white/10 bg-white/[0.03] px-3 py-1.5 font-mono text-[11px] text-slate-300">MySQL</span>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- ROW 3: INTERACTIVE SKILLS & LIVE CODE PREVIEW BENTO -->
+    <section id="skills" class="scroll-mt-36 md:scroll-mt-32 mt-16 sm:mt-20 grid grid-cols-1 gap-10 md:grid-cols-12">
+
+      <article class="bento-card md:col-span-6 p-8 sm:p-11">
+        <div class="bento-content flex flex-col justify-between gap-8">
+          <div>
+            <div class="flex items-center justify-between">
+              <span class="font-mono text-[11px] uppercase tracking-widest text-slate-400">Key Skills Matrix</span>
+              <span class="font-mono text-[11px] accent-text">Tap a skill to preview</span>
+            </div>
+            <h3 class="mt-3 text-xl font-bold text-white">Technical &amp; Interpersonal Stack</h3>
+
+            <div class="mt-7">
+              <p class="mb-3 font-mono text-[11px] text-slate-400">Programming, Web &amp; Database</p>
+              <div class="flex flex-wrap gap-2.5">
+                <button onclick="selectSkill('php', this)" class="skill-btn glow-pill active rounded-lg px-4 py-2 font-mono text-xs text-slate-200">PHP</button>
+                <button onclick="selectSkill('python', this)" class="skill-btn glow-pill rounded-lg px-4 py-2 font-mono text-xs text-slate-200">Python</button>
+                <button onclick="selectSkill('java', this)" class="skill-btn glow-pill rounded-lg px-4 py-2 font-mono text-xs text-slate-200">Java Fundamentals</button>
+                <button onclick="selectSkill('htmlcss', this)" class="skill-btn glow-pill rounded-lg px-4 py-2 font-mono text-xs text-slate-200">HTML &amp; CSS</button>
+                <button onclick="selectSkill('mysql', this)" class="skill-btn glow-pill rounded-lg px-4 py-2 font-mono text-xs text-slate-200">MySQL</button>
+                <button onclick="selectSkill('troubleshoot', this)" class="skill-btn glow-pill rounded-lg px-4 py-2 font-mono text-xs text-slate-200">Troubleshooting</button>
+              </div>
+            </div>
+
+            <div class="mt-7">
+              <p class="mb-3 font-mono text-[11px] text-slate-400">Core &amp; Soft Skills</p>
+              <div class="flex flex-wrap gap-2.5">
+                <span class="glow-pill rounded-lg px-3.5 py-2 text-xs text-slate-300">Problem-Solving</span>
+                <span class="glow-pill rounded-lg px-3.5 py-2 text-xs text-slate-300">Teamwork</span>
+                <span class="glow-pill rounded-lg px-3.5 py-2 text-xs text-slate-300">Communication</span>
+                <span class="glow-pill rounded-lg px-3.5 py-2 text-xs text-slate-300">Willingness to Learn</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="rounded-xl border border-white/[0.07] bg-black/30 p-5">
+            <div class="flex items-center justify-between text-xs">
+              <span id="skill-title" class="font-semibold text-white">PHP — Server-Side Web Logic</span>
+              <span id="skill-tag" class="font-mono text-[11px] accent-text">Backend</span>
+            </div>
+            <p id="skill-desc" class="mt-2 text-xs leading-loose text-slate-400">
+              Form handling, input validation, and connecting dynamic web pages with relational MySQL databases.
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <article class="bento-card md:col-span-6 p-8 sm:p-11">
+        <div class="bento-content flex flex-col justify-between gap-6">
+          <div class="flex items-center justify-between border-b border-white/[0.07] pb-4">
+            <div class="flex items-center gap-2">
+              <span class="h-2.5 w-2.5 rounded-full bg-rose-500/80"></span>
+              <span class="h-2.5 w-2.5 rounded-full bg-amber-400/80"></span>
+              <span class="h-2.5 w-2.5 rounded-full bg-emerald-400/80"></span>
+              <span id="code-filename" class="ml-2 font-mono text-xs text-slate-400">supply_record.php</span>
+            </div>
+            <button onclick="copyCodeSnippet()" class="rounded-md border border-white/10 bg-white/5 px-3.5 py-1.5 font-mono text-[11px] text-slate-300 transition hover:border-white/25 hover:text-white active:scale-95">
+              Copy Code
+            </button>
+          </div>
+
+          <pre class="overflow-x-auto font-mono text-xs leading-loose text-slate-200"><code id="code-display">&lt;?php
+// Supply &amp; Inventory Verification Helper
+function verifySupplyRecord(int $recorded, int $actual): array {
+    $variance = $actual - $recorded;
+    return [
+        'status'   =&gt; $variance === 0 ? 'EXACT' : 'UPDATED',
+        'verified' =&gt; $actual,
+        'variance' =&gt; $variance
+    ];
+}
+?&gt;</code></pre>
+
+          <div class="flex items-center justify-between border-t border-white/[0.07] pt-4 font-mono text-[11px] text-slate-400">
+            <span>STI College San Jose · Lab Practice</span>
+            <span class="accent-text">Ready for Production Learning</span>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- ROW 4: TRAININGS, REFERENCE & DIRECT CONTACT BENTO -->
+    <section id="credentials" class="scroll-mt-36 md:scroll-mt-32 mt-16 sm:mt-20 grid grid-cols-1 gap-10 md:grid-cols-12">
+
+      <article class="bento-card md:col-span-4 p-8 sm:p-9">
+        <div class="bento-content flex flex-col justify-between gap-6">
+          <div>
+            <span class="font-mono text-[11px] uppercase tracking-widest text-slate-400">Trainings &amp; Seminars</span>
+            <h3 class="mt-3 text-lg font-bold text-white">Cybersecurity &amp; Safety</h3>
+
+            <div class="mt-6 space-y-5">
+              <div class="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4">
+                <div class="flex items-center justify-between">
+                  <span class="font-mono text-[11px] accent-text">October 2025</span>
+                  <span class="rounded bg-white/5 px-2 py-0.5 font-mono text-[10px] text-slate-400">Workshop</span>
+                </div>
+                <p class="mt-2 text-sm font-semibold text-white">Cyber Threat Management</p>
+              </div>
+
+              <div class="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4">
+                <div class="flex items-center justify-between">
+                  <span class="font-mono text-[11px] accent-text">September 2025</span>
+                  <span class="rounded bg-white/5 px-2 py-0.5 font-mono text-[10px] text-slate-400">Seminar</span>
+                </div>
+                <p class="mt-2 text-sm font-semibold text-white">Digital Safety and Security Awareness</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="bento-card md:col-span-4 p-8 sm:p-9">
+        <div class="bento-content flex flex-col justify-between gap-6">
+          <div>
+            <span class="font-mono text-[11px] uppercase tracking-widest text-slate-400">Character Reference</span>
+            <h3 class="mt-3 text-lg font-bold text-white">Mrs. Rosalie Emana Rafael</h3>
+            <p class="mt-2 text-xs font-medium accent-text">Project Development Officer II</p>
+            <p class="mt-1.5 text-xs leading-relaxed text-slate-400">Department of Social Welfare and Development (DSWD)</p>
+          </div>
+
+          <div class="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4">
+            <p class="font-mono text-[11px] text-slate-400">Contact Number</p>
+            <div class="mt-2 flex items-center justify-between gap-2">
+              <a href="tel:09973770150" class="font-mono text-sm font-semibold text-white hover:underline">0997-377-0150</a>
+              <button onclick="copyToClipboard('0997-377-0150', 'Reference phone copied!')" class="rounded-md border border-white/10 bg-white/5 px-3 py-1.5 font-mono text-[11px] text-slate-300 transition hover:border-white/25 hover:text-white active:scale-95">
+                Copy
+              </button>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="bento-card md:col-span-4 p-8 sm:p-9">
+        <div class="bento-content flex flex-col justify-between gap-6">
+          <div>
+            <span class="font-mono text-[11px] uppercase tracking-widest text-slate-400">Get In Touch</span>
+            <h3 class="mt-3 text-lg font-bold text-white">Direct Contact Details</h3>
+            <p class="mt-2 text-xs leading-loose text-slate-400">
+              Available for OJT / internship placements, academic collaborations, and entry-level IT support or web roles.
+            </p>
+          </div>
+
+          <div class="space-y-4">
+            <button onclick="copyToClipboard('reymarjohn00@gmail.com', 'Email copied!')" class="glow-pill flex w-full items-center justify-between rounded-xl px-4 py-3.5 text-left">
+              <div>
+                <p class="font-mono text-[10px] uppercase text-slate-400">Email</p>
+                <p class="mt-0.5 font-mono text-xs font-medium text-white">reymarjohn00@gmail.com</p>
+              </div>
+              <span class="font-mono text-[11px] accent-text">Copy</span>
+            </button>
+
+            <button onclick="copyToClipboard('09493234406', 'Phone number copied!')" class="glow-pill flex w-full items-center justify-between rounded-xl px-4 py-3.5 text-left">
+              <div>
+                <p class="font-mono text-[10px] uppercase text-slate-400">Mobile</p>
+                <p class="mt-0.5 font-mono text-xs font-medium text-white">09493234406</p>
+              </div>
+              <span class="font-mono text-[11px] accent-text">Copy</span>
+            </button>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- Footer -->
+    <footer class="mt-20 flex flex-col items-center justify-between gap-4 border-t border-white/[0.06] pt-8 text-xs text-slate-500 sm:flex-row">
+      <p>© 2026 Reymar John O. Sengco · San Jose City, Nueva Ecija</p>
+      
+    </footer>
+  </main>
+
+  <!-- Experience / Project Detail Modal -->
+  <div id="detail-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/75 p-5 backdrop-blur-md">
+    <div class="bento-card is-glowing w-full max-w-lg p-8 sm:p-9">
+      <div class="bento-content">
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <span id="modal-badge" class="font-mono text-xs accent-text">EXPERIENCE</span>
+            <h3 id="modal-title" class="mt-2 text-xl font-bold text-white">Title</h3>
+            <p id="modal-org" class="mt-1 text-xs text-slate-400">Organization</p>
+          </div>
+          <button onclick="closeDetailModal()" class="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 font-mono text-xs text-slate-300 hover:bg-white/10 active:scale-95">
+            Close
+          </button>
+        </div>
+
+        <ul id="modal-bullets" class="mt-6 space-y-4 text-sm leading-loose text-slate-300"></ul>
+
+        <div class="mt-8 flex justify-end">
+          <button onclick="closeDetailModal()" class="accent-btn rounded-xl px-6 py-2.5 text-xs">
+            Done
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="pointer-events-none fixed bottom-6 left-1/2 z-50 -translate-x-1/2 translate-y-4 opacity-0 transition-all duration-300 sm:left-auto sm:right-6 sm:translate-x-0">
+    <div class="whitespace-nowrap rounded-xl border border-white/15 bg-slate-900/95 px-4 py-3 font-mono text-xs text-white shadow-xl backdrop-blur-md">
+      <span class="mr-1.5 accent-text">✓</span>
+      <span id="toast-msg">Copied!</span>
+    </div>
+  </div>
+
+  <script>
+    // 0. Inline Photo Expansion (Not a Modal) & Upload
+    let isPhotoExpanded = false;
+
+    function toggleInlinePhoto() {
+      isPhotoExpanded = !isPhotoExpanded;
+      const frame = document.getElementById('hero-photo-frame');
+      const btn = document.getElementById('photo-size-btn');
+      const caption = document.getElementById('inline-photo-caption');
+
+      frame.classList.toggle('is-expanded', isPhotoExpanded);
+      frame.setAttribute('aria-expanded', String(isPhotoExpanded));
+      btn.textContent = isPhotoExpanded ? 'Shrink Photo' : 'Enlarge Photo';
+
+      if (isPhotoExpanded) {
+        caption.classList.remove('hidden');
+        caption.classList.add('flex');
+      } else {
+        caption.classList.add('hidden');
+        caption.classList.remove('flex');
+      }
+    }
+
+    function handlePhotoUpload(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const dataUrl = e.target.result;
+        document.getElementById('hero-photo-img').src = dataUrl;
+        try {
+          localStorage.setItem('reymar_profile_photo', dataUrl);
+        } catch (_) {}
+        showToast('Profile photo updated!');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    try {
+      const savedPhoto = localStorage.getItem('reymar_profile_photo');
+      if (savedPhoto) {
+        document.getElementById('hero-photo-img').src = savedPhoto;
+      }
+    } catch (_) {}
+
+    // 1. Unified Pointer, Touch & Mobile Scroll Spotlight on All Bento Cards
+    const bentoCards = document.querySelectorAll('.bento-card');
+    let touchClearTimer;
+
+    function updateCardGlowFromPoint(clientX, clientY, activateTouchGlow = false) {
+      bentoCards.forEach((card) => {
+        const rect = card.getBoundingClientRect();
+        const x = clientX - rect.left;
+        const y = clientY - rect.top;
+        card.style.setProperty('--mouse-x', `${x}px`);
+        card.style.setProperty('--mouse-y', `${y}px`);
+
+        if (activateTouchGlow) {
+          const isInside = x >= 0 && x <= rect.width && y >= 0 && y <= rect.height;
+          card.classList.toggle('is-glowing', isInside);
+        }
+      });
+    }
+
+    document.addEventListener('pointermove', (e) => {
+      if (e.pointerType === 'mouse') {
+        updateCardGlowFromPoint(e.clientX, e.clientY, false);
+      }
+    }, { passive: true });
+
+    document.addEventListener('touchstart', (e) => {
+      if (!e.touches.length) return;
+      clearTimeout(touchClearTimer);
+      updateCardGlowFromPoint(e.touches[0].clientX, e.touches[0].clientY, true);
+    }, { passive: true });
+
+    document.addEventListener('touchmove', (e) => {
+      if (!e.touches.length) return;
+      clearTimeout(touchClearTimer);
+      updateCardGlowFromPoint(e.touches[0].clientX, e.touches[0].clientY, true);
+    }, { passive: true });
+
+    document.addEventListener('touchend', () => {
+      touchClearTimer = setTimeout(() => {
+        bentoCards.forEach((card) => card.classList.remove('is-glowing'));
+      }, 900);
+    }, { passive: true });
+
+    if (window.matchMedia('(hover: none)').matches && 'IntersectionObserver' in window) {
+      const scrollObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.style.setProperty('--mouse-x', '50%');
+              entry.target.style.setProperty('--mouse-y', '30%');
+              entry.target.classList.add('is-glowing');
+            } else {
+              entry.target.classList.remove('is-glowing');
+            }
+          });
+        },
+        { rootMargin: '-25% 0px -25% 0px', threshold: 0.25 }
+      );
+      bentoCards.forEach((card) => scrollObserver.observe(card));
+    }
+
+    // 2. Glow Color Theme Switcher
+    const glowThemes = {
+      cyan: { rgb: '56, 189, 248', secRgb: '129, 140, 248', hex: '#38bdf8', secHex: '#818cf8' },
+      emerald: { rgb: '52, 211, 153', secRgb: '45, 212, 191', hex: '#34d399', secHex: '#2dd4bf' },
+      violet: { rgb: '167, 139, 250', secRgb: '232, 121, 249', hex: '#a78bfa', secHex: '#e879f9' },
+      amber: { rgb: '251, 191, 36', secRgb: '251, 146, 60', hex: '#fbbf24', secHex: '#fb923c' }
+    };
+
+    function setGlowTheme(themeKey, btn) {
+      const theme = glowThemes[themeKey];
+      if (!theme) return;
+      const root = document.documentElement;
+      root.style.setProperty('--glow-rgb', theme.rgb);
+      root.style.setProperty('--glow-sec-rgb', theme.secRgb);
+      root.style.setProperty('--accent-hex', theme.hex);
+      root.style.setProperty('--accent-sec', theme.secHex);
+
+      document.querySelectorAll('.theme-dot').forEach((dot) => {
+        dot.classList.remove('ring-2', 'ring-white/80');
+        dot.classList.add('opacity-60');
+      });
+      if (btn) {
+        btn.classList.remove('opacity-60');
+        btn.classList.add('ring-2', 'ring-white/80');
+      }
+      try {
+        localStorage.setItem('reymar_glow_theme', themeKey);
+      } catch (_) {}
+    }
+
+    try {
+      const savedTheme = localStorage.getItem('reymar_glow_theme');
+      if (savedTheme && glowThemes[savedTheme]) {
+        const matchingBtn = document.querySelector(`[onclick="setGlowTheme('${savedTheme}', this)"]`);
+        setGlowTheme(savedTheme, matchingBtn);
+      }
+    } catch (_) {}
+
+    // 3. Interactive Skills & Code Inspector
+    const skillData = {
+      php: {
+        title: 'PHP — Server-Side Web Logic',
+        tag: 'Backend',
+        desc: 'Form handling, input validation, and connecting dynamic web pages with relational MySQL databases.',
+        filename: 'supply_record.php',
+        code: `<?php
+// Supply & Inventory Verification Helper
+function verifySupplyRecord(int $recorded, int $actual): array {
+    $variance = $actual - $recorded;
+    return [
+        'status'   => $variance === 0 ? 'EXACT' : 'UPDATED',
+        'verified' => $actual,
+        'variance' => $variance
+    ];
+}
+?>`
+      },
+      python: {
+        title: 'Python — Scripting & Logic',
+        tag: 'Programming',
+        desc: 'Clean data processing, automation scripts, and structured algorithmic problem-solving.',
+        filename: 'audit_supplies.py',
+        code: `# Community Nutrition Supply Counter
+supplies = [
+    {"item": "Vitamin Packs", "qty": 120},
+    {"item": "Relief Kits", "qty": 85}
+]
+
+total_units = sum(entry["qty"] for entry in supplies)
+print(f"Verified Total Units: {total_units}")`
+      },
+      java: {
+        title: 'Java Fundamentals — OOP & Structure',
+        tag: 'Core OOP',
+        desc: 'Object-oriented programming principles, classes, control structures, and console applications.',
+        filename: 'StudentProfile.java',
+        code: `public class StudentProfile {
+    private String name = "Reymar John O. Sengco";
+    private String school = "STI College San Jose";
+
+    public void displayStatus() {
+        System.out.println(name + " | BSIT @ " + school);
+    }
+}`
+      },
+      htmlcss: {
+        title: 'HTML & CSS — Responsive Web Interfaces',
+        tag: 'Frontend',
+        desc: 'Semantic HTML5 markup, modern CSS Grid/Flexbox layouts, and accessible UI styling.',
+        filename: 'bento-card.css',
+        code: `.bento-card {
+  border-radius: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(14, 18, 28, 0.82);
+  backdrop-filter: blur(18px);
+}`
+      },
+      mysql: {
+        title: 'MySQL — Relational Database Management',
+        tag: 'Database',
+        desc: 'Creating normalized tables, writing CRUD queries, and maintaining accurate record integrity.',
+        filename: 'barangay_outreach.sql',
+        code: `SELECT beneficiary_group, COUNT(*) AS total_assisted
+FROM outreach_records
+WHERE municipality = 'San Jose City'
+GROUP BY beneficiary_group
+ORDER BY total_assisted DESC;`
+      },
+      troubleshoot: {
+        title: 'Troubleshooting & Record Auditing',
+        tag: 'Technical Ops',
+        desc: 'Diagnosing basic software/system issues and verifying data accuracy across operational records.',
+        filename: 'diagnostics.sh',
+        code: `# Basic System & Database Connectivity Check
+echo "Checking local web server & MySQL status..."
+php -v
+mysql --version
+echo "Status: All core services operational."`
+      }
+    };
+
+    function selectSkill(key, btn) {
+      const item = skillData[key];
+      if (!item) return;
+
+      document.querySelectorAll('.skill-btn').forEach((b) => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+
+      document.getElementById('skill-title').textContent = item.title;
+      document.getElementById('skill-tag').textContent = item.tag;
+      document.getElementById('skill-desc').textContent = item.desc;
+      document.getElementById('code-filename').textContent = item.filename;
+      document.getElementById('code-display').textContent = item.code;
+    }
+
+    function copyCodeSnippet() {
+      const code = document.getElementById('code-display').textContent;
+      copyToClipboard(code, 'Code snippet copied!');
+    }
+
+    // 4. Experience / Project Detail Modal
+    const modalDetails = {
+      spes: {
+        badge: 'WORK EXPERIENCE · JULY 2025',
+        title: 'SPES (Nutrition Office)',
+        org: 'Public Employment Service Office — San Jose City, Nueva Ecija',
+        bullets: [
+          'Checked and corrected paper records, updating quantities and volumes of supplies to keep reports exact.',
+          'Packed, carried, and distributed relief goods and supplies for community programs.',
+          'Accompanied nutrition office staff on barangay visits to support programs for pregnant women, first-time mothers, and teenage mothers.',
+          'Aided staff in easing outreach activities and helping beneficiaries during sessions.'
+        ]
+      },
+      academic: {
+        badge: 'ACADEMIC PROGRAMMING · 2023–PRESENT',
+        title: 'Academic Programming Activities',
+        org: 'STI College San Jose',
+        bullets: [
+          'Practiced programming concepts using PHP, Python, and Java fundamentals.',
+          'Applied HTML and CSS in learning basic web development.',
+          'Used MySQL to understand basic database management and data handling.',
+          'Completed academic activities that developed logical thinking and problem-solving skills.'
+        ]
+      }
+    };
+
+    let lastFocusedElement = null;
+
+    function openDetailModal(key) {
+      const data = modalDetails[key];
+      if (!data) return;
+
+      lastFocusedElement = document.activeElement;
+      document.getElementById('modal-badge').textContent = data.badge;
+      document.getElementById('modal-title').textContent = data.title;
+      document.getElementById('modal-org').textContent = data.org;
+
+      const list = document.getElementById('modal-bullets');
+      list.innerHTML = data.bullets
+        .map(
+          (b) => `<li class="flex items-start gap-3">
+            <span class="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-sky-400"></span>
+            <span>${b}</span>
+          </li>`
+        )
+        .join('');
+
+      const modal = document.getElementById('detail-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+      modal.querySelector('button').focus();
+    }
+
+    function closeDetailModal() {
+      const modal = document.getElementById('detail-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      document.body.style.overflow = '';
+      if (lastFocusedElement) lastFocusedElement.focus();
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeDetailModal();
+      }
+    });
+
+    document.getElementById('detail-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'detail-modal') closeDetailModal();
+    });
+
+    // 5. Cross-Browser Clipboard Utility
+    let toastTimer;
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-msg').textContent = message;
+      toast.classList.remove('translate-y-4', 'opacity-0');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.add('translate-y-4', 'opacity-0');
+      }, 2400);
+    }
+
+    function copyToClipboard(text, message) {
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(() => showToast(message)).catch(() => fallbackCopy(text, message));
+      } else {
+        fallbackCopy(text, message);
+      }
+    }
+
+    function fallbackCopy(text, message) {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        showToast(message);
+      } catch (_) {
+        showToast('Press Ctrl+C / Hold to copy');
+      }
+      document.body.removeChild(textarea);
+    }
+
+    // 6. Live Philippine Standard Time Clock (UTC+8)
+    function updateClock() {
+      const now = new Date();
+      const options = {
+        timeZone: 'Asia/Manila',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true
+      };
+      document.getElementById('live-clock').textContent = now.toLocaleTimeString('en-US', options) + ' PHT';
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+  </script>
+</body>
+</html>
+
+```
